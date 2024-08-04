@@ -23,7 +23,9 @@ services:
   habit-loop-dev:
     container_name: habit-loop-dev
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - path: ./.env
+        required: false
     build:
       target: dev
       context: .
