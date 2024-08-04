@@ -32,18 +32,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 20
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        run: npx jest --coverage --coverageReporters json-summary
-
       - name: Upload coverage report
-        uses: MishaKav/jest-coverage-comment@main
+        uses: ArtiomTr/jest-coverage-report-action@v2
 
   build-docker-image:
     runs-on: ubuntu-latest
