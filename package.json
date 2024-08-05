@@ -78,7 +78,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "test",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": [
@@ -86,11 +86,10 @@
       ]
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "extensionsToTreatAsEsm": [
-      ".ts",
-      ".tsx"
+      "src/**/*.(t|j)s",
+      "!src/main.ts",
+      "!src/**/index.ts",
+      "!src/metadata.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

@@ -25,7 +25,6 @@ jobs:
 
       - name: Run lint and format check
         run: npm run lint-and-format-check
-
   build-nestjs:
     runs-on: ubuntu-latest
 

@@ -8,6 +8,9 @@ services:
         - PORT=${PORT:-3000}
     ports:
       - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      - PORT=${PORT:-3000}
+      - LOGGER_LEVEL=${LOGGER_LEVEL:-log}
     deploy:
       resources:
         limits:
@@ -20,7 +23,9 @@ services:
   habit-loop-dev:
     container_name: habit-loop-dev
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - path: ./.env
+        required: false
     build:
       target: dev
       context: .
