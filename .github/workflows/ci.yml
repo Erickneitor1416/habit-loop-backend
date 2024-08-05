@@ -48,5 +48,20 @@ jobs:
           PORT: ${{ secrets.PORT }}
         run: docker compose up -d --build habit-loop-production
 
-      - name: test health endpoint
+      - name: Wait for the service to be up
+        run: |
+          echo "Waiting for the service to be up..."
+          retries=0
+          max_retries=10
+          until curl -s http://localhost:3000/health || [ $retries -eq $max_retries ]; do
+            echo "Waiting for the service to be up, retry #$retries..."
+            retries=$((retries + 1))
+            sleep 5
+          done
+          if [ $retries -eq $max_retries ]; then
+            echo "Service did not start in time"
+            exit 1
+          fi
+
+      - name: Test health endpoint
         run: curl -s http://localhost:3000/health
