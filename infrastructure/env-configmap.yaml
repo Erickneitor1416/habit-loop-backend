@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+  labels:
+    app: habit-loop
+data:
+  LOGGER_LEVEL: log
+  PORT: "3000"

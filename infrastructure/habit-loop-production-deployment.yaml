@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: habit-loop-production
+  labels:
+    app: habit-loop-production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: habit-loop-production
+  template:
+    metadata:
+      labels:
+        app: habit-loop-production
+    spec:
+      containers:
+      - name: habit-loop-production
+        image: habit-loop-production
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: LOGGER_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: env-config
+              key: LOGGER_LEVEL
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: env-config
+              key: PORT
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DATABASE_URL
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+      restartPolicy: Always
