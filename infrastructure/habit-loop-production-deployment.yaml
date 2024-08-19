@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: habit-loop-production
-        image: habit-loop-production
+        image: erickneitor/habit-loop-production
         ports:
         - containerPort: 3000
           protocol: TCP
