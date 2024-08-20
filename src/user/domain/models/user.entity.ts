@@ -3,24 +3,17 @@ export class User {
     private _name: string,
     private _email: string,
     private _password: string,
-    private _verified: boolean,
     private _id?: string,
   ) {
     this._id = _id;
     this.name = _name;
     this.email = _email;
     this.password = _password;
-    this.verified = _verified;
   }
   public get id(): string | undefined {
     return this._id;
   }
-  public get verified(): boolean {
-    return this._verified;
-  }
-  public set verified(value: boolean) {
-    this._verified = value;
-  }
+
   public get password(): string {
     return this._password;
   }
