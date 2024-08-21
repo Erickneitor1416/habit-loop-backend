@@ -8,6 +8,22 @@
   <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Dockerized 🐳_-blue.svg" alt="docker"/></a>
 </p>
 
+## Hexagonal Architecture
+
+Hexagonal Architecture, also known as Ports and Adapters, is a design pattern that emphasizes the separation of concerns within an application. It aims to create loosely coupled components that are easy to maintain and extend. The architecture is organized into three main layers:
+
+- **Domain**: The core of the application, which contains the business logic and rules. This layer is independent of external systems and should not be influenced by technical details or infrastructure concerns.
+
+- **Application**: This layer acts as a mediator between the domain and external systems. It defines the use cases, handling the flow of information between the domain and other parts of the application. The application layer coordinates interactions with the domain, ensuring that the business rules are applied correctly.
+
+- **Infrastructure**: The infrastructure layer contains the technical details and implementations for interacting with external systems, such as databases, messaging systems, and external APIs. It is responsible for implementing the interfaces defined by the application layer and for managing the dependencies required to interact with external systems.
+
+The key principle of Hexagonal Architecture is that the **Domain** layer is at the core, with the **Application** and **Infrastructure** layers surrounding it. The domain remains isolated from external influences, making it easier to test, maintain, and evolve.
+
+## Vertical Slicing in Hexagonal Architecture
+
+Vertical slicing is an approach that breaks down a project into vertical slices, where each slice represents a complete feature or functionality that spans across all layers of the architecture: Domain, Application, and Infrastructure. Instead of building an entire layer for the whole application at once, vertical slicing encourages creating a self-contained layer for each entity or feature.
+
 ## 🧑‍💻 Developing
 
 First, we will need to create our .env file, we can create a copy from the example one:
