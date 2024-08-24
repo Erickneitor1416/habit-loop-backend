@@ -19,6 +19,8 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+    depends_on:
+      - db
 
   habit-loop-dev:
     container_name: habit-loop-dev
@@ -47,3 +49,15 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_DB: ${POSTGRES_DB:-habit_loop}
