@@ -1,1 +1,1 @@
-export { MemoryUserRepository } from './memory.user-repository';
+export { MemoryUserRepository } from './memory/memory.user-repository';
