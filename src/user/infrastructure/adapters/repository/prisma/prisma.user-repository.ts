@@ -1,33 +1,42 @@
+import { PrismaService } from '@/shared/prisma-client';
 import { User, UserRepository } from '@/user/domain';
-
+import { User as PrismaUser } from '@prisma/client';
+import Injectable from 'src/IoC/dependency-injector';
+@Injectable()
 export class PrismaUserRepository extends UserRepository {
-  private readonly users: User[];
-  constructor() {
+  constructor(private readonly prisma: PrismaService) {
     super();
-    this.users = [];
   }
-  async findById(userId: string): Promise<User | null> {
-    const user = this.users.find(user => user.id === userId);
-    if (!user) {
-      return Promise.resolve(null);
-    }
-    return Promise.resolve(user);
-  }
-  async update(user: User): Promise<void> {
-    const index = this.users.findIndex(u => u.id === user.id);
-    this.users[index] = user;
-  }
-
-  async save(user: User): Promise<User> {
-    this.users.push(user);
-    return Promise.resolve(user);
-  }
-
   async findByEmail(email: string): Promise<User | null> {
-    const user = this.users.find(user => user.email === email);
-    if (!user) {
-      return Promise.resolve(null);
+    const prismaUser: PrismaUser | null = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!prismaUser) {
+      return null;
     }
-    return Promise.resolve(user);
+    return this.toDomain(prismaUser);
+  }
+  async save(user: User): Promise<User> {
+    const prismaUser: PrismaUser = await this.prisma.user.create({
+      data: {
+        email: user.email,
+        name: user.name,
+        password: user.password,
+      },
+    });
+    return this.toDomain(prismaUser);
+  }
+
+  findById(userId: string): Promise<User | null> {
+    throw new Error(`Method not implemented.${userId}`);
+  }
+  update(user: User): Promise<void> {
+    throw new Error(`Method not implemented.${user.name}`);
+  }
+
+  private toDomain(user: PrismaUser): User {
+    return new User(user.name, user.email, user.password, user.id);
   }
 }

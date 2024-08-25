@@ -15,9 +15,11 @@ COPY tsconfig*.json .
 COPY .swcrc .
 COPY nest-cli.json .
 COPY src src
+COPY prisma prisma
 
 EXPOSE $PORT
-CMD ["npm", "run" ,"start:dev"]
+
+CMD ["sh", "-c", "npm run migrate:dev && npm run start:dev"]
 
 FROM base AS build
 
@@ -31,6 +33,7 @@ COPY tsconfig*.json .
 COPY .swcrc .
 COPY nest-cli.json .
 COPY src src
+COPY prisma prisma
 
 RUN npm run build && \
     npm prune --production
@@ -47,4 +50,4 @@ COPY --from=build $DIR/dist dist
 
 USER $USER
 EXPOSE $PORT
-CMD ["dumb-init", "node", "dist/main.js"]
+CMD ["sh", "-c", "npm run migrate:deploy && dumb-init node dist/main.js"]

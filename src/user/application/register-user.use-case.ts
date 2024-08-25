@@ -10,8 +10,9 @@ export class RegisterUserUseCase {
     if (userAlreadyExists) {
       throw new UserAlreadyExistsError();
     }
+
     user.password = await this.hashPassword(user.password);
-    return this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
   private async hashPassword(password: string): Promise<string> {
     return await hash(password, 10);

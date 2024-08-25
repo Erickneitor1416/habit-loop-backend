@@ -1,10 +1,15 @@
-import { AppModule } from 'src/app.module';
+import { PrismaService } from '@/src/shared/prisma-client';
+import {
+  MemoryUserRepository,
+  PrismaUserRepository,
+} from '@/src/user/infrastructure';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as nock from 'nock';
+import { AppModule } from 'src/app.module';
 import request from 'supertest';
 
 describe('Health', () => {
@@ -13,7 +18,17 @@ describe('Health', () => {
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(PrismaUserRepository)
+      .useClass(MemoryUserRepository)
+      .overrideProvider(PrismaService)
+      .useClass(
+        class PrismaServiceMock extends PrismaService {
+          async onModuleInit() {}
+          async onModuleDestroy() {}
+        },
+      )
+      .compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(),
