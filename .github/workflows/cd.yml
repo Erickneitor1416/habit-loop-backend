@@ -19,8 +19,14 @@ jobs:
           PORT: ${{ secrets.PORT }}
         run: docker compose up -d --build habit-loop-production
 
+      - name: Create docker tag
+        run: docker tag habit-loop-backend-habit-loop-production erickneitor/habit-loop-production
+
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/habit-loop-production
+
+      - name: delete Kubernetes secret
+        run: kubectl delete secret db-secret
 
       - name: Create Kubernetes secret
         run: kubectl create secret generic db-secret `
