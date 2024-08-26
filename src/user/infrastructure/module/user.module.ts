@@ -22,7 +22,7 @@ import { JwtModule } from '@nestjs/jwt';
     RegisterUserUseCase,
     PrismaUserRepository,
     PrismaService,
-    { provide: UserRepository, useExisting: PrismaUserRepository },
+    { provide: UserRepository, useClass: PrismaUserRepository },
     { provide: AuthService, useClass: JWTAuthService },
   ],
 })

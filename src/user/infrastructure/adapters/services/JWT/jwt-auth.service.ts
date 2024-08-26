@@ -1,6 +1,7 @@
 import { AuthService, User } from '@/user/domain';
 import { JwtService } from '@nestjs/jwt';
 import Injectable from 'src/IoC/dependency-injector';
+
 @Injectable()
 export class JWTAuthService extends AuthService {
   constructor(private readonly jwtService: JwtService) {
@@ -15,5 +16,10 @@ export class JWTAuthService extends AuthService {
   private async generateToken(user: User): Promise<string> {
     const payload = { email: user.email, sub: user.id };
     return this.jwtService.signAsync(payload);
+  }
+  async verify(token: string): Promise<{ email: string; sub: string }> {
+    return this.jwtService.verifyAsync(token, {
+      secret: process.env.JWT_SECRET ?? 'secret',
+    });
   }
 }

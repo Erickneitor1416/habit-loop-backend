@@ -1,3 +1,4 @@
+import { Public } from '@/src/shared/public-decorator';
 import { Controller, Get, HttpCode, Inject, Logger } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 
@@ -14,6 +15,7 @@ export class HealthController {
       },
     },
   })
+  @Public()
   @Get()
   @HttpCode(200)
   run() {

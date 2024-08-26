@@ -1,1 +1,1 @@
-export { RegisterUserDto } from './register-user.dto';
+export { RegisterUserDto, RegisterUserResponseDto } from './register-user.dto';

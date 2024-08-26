@@ -1,5 +1,5 @@
 import { RegisterUserUseCase } from '@/user/application';
-import { UserRepository } from '@/user/domain';
+import { AuthService, UserRepository } from '@/user/domain';
 import { MemoryUserRepository, UserController } from '@/user/infrastructure';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -10,9 +10,9 @@ describe('UserController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
-        MemoryUserRepository,
-        { provide: UserRepository, useExisting: MemoryUserRepository },
         RegisterUserUseCase,
+        { provide: UserRepository, useClass: MemoryUserRepository },
+        { provide: AuthService, useValue: { register: jest.fn() } },
       ],
     }).compile();
 
