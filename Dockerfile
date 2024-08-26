@@ -35,7 +35,8 @@ COPY nest-cli.json .
 COPY src src
 COPY prisma prisma
 
-RUN npm run build && \
+RUN npm run migrate:deploy && \
+    npm run build && \
     npm prune --production
 
 FROM base AS production
@@ -50,4 +51,4 @@ COPY --from=build $DIR/dist dist
 
 USER $USER
 EXPOSE $PORT
-CMD ["sh", "-c", "npm run migrate:deploy && dumb-init node dist/main.js"]
+CMD ["sh", "-c", "dumb-init node dist/main.js"]
