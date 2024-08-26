@@ -19,9 +19,14 @@ jobs:
           PORT: ${{ secrets.PORT }}
         run: docker compose up -d --build habit-loop-production
 
-
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/habit-loop-production
+
+      - name: Create Kubernetes secret
+        run: kubectl create secret generic db-secret \
+          --from-literal=DATABASE_URL=${{ secrets.DATABASE_URL }} \
+          --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          --from-literal=DIRECT_URL=${{ secrets.DIRECT_URL }} \
 
       - name: Deploy to miniKube
         run: kubectl apply -f .\infrastructure/
