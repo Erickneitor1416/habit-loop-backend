@@ -63,7 +63,7 @@ jobs:
         env:
           LOGGER_LEVEL: ${{ secrets.LOGGER_LEVEL }}
           PORT: ${{ secrets.PORT }}
-        run: docker compose build habit-loop-production
+        run: docker compose up -d --build habit-loop-production
 
       - name: Wait for the service to be up
         run: |
