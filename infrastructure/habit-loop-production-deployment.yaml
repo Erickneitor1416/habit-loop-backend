@@ -15,32 +15,38 @@ spec:
         app: habit-loop-production
     spec:
       containers:
-      - name: habit-loop-production
-        image: erickneitor/habit-loop-production
-        ports:
-        - containerPort: 3000
-          protocol: TCP
-        env:
-        - name: LOGGER_LEVEL
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: LOGGER_LEVEL
-        - name: PORT
-          valueFrom:
-            configMapKeyRef:
-              name: env-config
-              key: PORT
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: DATABASE_URL
-        resources:
-          requests:
-            cpu: "250m"
-            memory: "256Mi"
-          limits:
-            cpu: "1"
-            memory: "512Mi"
+        - name: habit-loop-production
+          image: erickneitor/habit-loop-production:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          env:
+            - name: LOGGER_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: env-config
+                  key: LOGGER_LEVEL
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: env-config
+                  key: PORT
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DATABASE_URL
+            - name: DIRECT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DIRECT_URL
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
       restartPolicy: Always

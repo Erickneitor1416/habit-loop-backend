@@ -11,6 +11,8 @@ services:
     environment:
       - PORT=${PORT:-3000}
       - LOGGER_LEVEL=${LOGGER_LEVEL:-log}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://user:password@db:5432/habit_loop}
+      - DIRECT_URL=${DIRECT_URL:-postgresql://user:password@db:5432/habit_loop}
     deploy:
       resources:
         limits:
@@ -19,6 +21,8 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+    networks:
+      - habit-loop-network
     depends_on:
       - db
 
@@ -26,7 +30,7 @@ services:
     container_name: habit-loop-dev
     restart: unless-stopped
     env_file:
-      - path: ./.env
+      - path: ./.env.devDocker
         required: false
     build:
       target: dev
@@ -49,6 +53,8 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+    networks:
+      - habit-loop-network
     depends_on:
       - db
   db:
@@ -61,3 +67,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_DB: ${POSTGRES_DB:-habit_loop}
+
+    networks:
+      - habit-loop-network
+
+networks:
+  habit-loop-network:
+    driver: bridge
