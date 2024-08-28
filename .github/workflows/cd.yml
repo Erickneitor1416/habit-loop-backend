@@ -17,7 +17,7 @@ jobs:
         env:
           LOGGER_LEVEL: ${{ secrets.LOGGER_LEVEL }}
           PORT: ${{ secrets.PORT }}
-        run: docker compose up -d --build habit-loop-production
+        run: docker compose build habit-loop-production
 
       - name: Create docker tag
         run: docker tag habit-loop-backend-habit-loop-production erickneitor/habit-loop-production

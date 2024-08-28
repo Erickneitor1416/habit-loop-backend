@@ -21,6 +21,8 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+    networks:
+      - habit-loop-network
     depends_on:
       - db
 
@@ -51,6 +53,8 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+    networks:
+      - habit-loop-network
     depends_on:
       - db
   db:
@@ -63,3 +67,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_DB: ${POSTGRES_DB:-habit_loop}
+
+    networks:
+      - habit-loop-network
+
+networks:
+  habit-loop-network:
+    driver: bridge
