@@ -10,6 +10,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as nock from 'nock';
 import { AppModule } from 'src/app.module';
 import request from 'supertest';
+import { authServiceMock } from 'test/mocks/auth-service.mock';
 import { PrismaServiceMock } from 'test/mocks/prisma-service.mock';
 
 describe('User', () => {
@@ -24,9 +25,7 @@ describe('User', () => {
       .overrideProvider(PrismaService)
       .useClass(PrismaServiceMock)
       .overrideProvider(AuthService)
-      .useValue({
-        register: jest.fn(),
-      })
+      .useValue(authServiceMock)
       .compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(

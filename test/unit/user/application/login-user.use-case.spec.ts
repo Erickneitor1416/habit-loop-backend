@@ -1,18 +1,19 @@
 import { PrismaService } from '@/src/shared/prisma-client';
 import {
   AuthService,
-  UserAlreadyExistsError,
   UserRepository,
+  UserUnauthorizedError,
 } from '@/src/user/domain';
-import { RegisterUserUseCase } from '@/user/application';
+import { LoginUserUseCase } from '@/user/application';
 import { MemoryUserRepository, UserModule } from '@/user/infrastructure';
 import { Test, TestingModule } from '@nestjs/testing';
 import { userFactory } from 'test/factories/user/user.factory';
 import { authServiceMock } from 'test/mocks/auth-service.mock';
 import { PrismaServiceMock } from 'test/mocks/prisma-service.mock';
 
-describe(RegisterUserUseCase, () => {
-  let useCase: RegisterUserUseCase;
+describe(LoginUserUseCase, () => {
+  let useCase: LoginUserUseCase;
+  let userRepository: UserRepository;
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [UserModule],
@@ -22,29 +23,32 @@ describe(RegisterUserUseCase, () => {
       .overrideProvider(PrismaService)
       .useClass(PrismaServiceMock)
       .overrideProvider(AuthService)
-      .useValue({
-        ...authServiceMock,
-        hashPassword: jest.fn().mockResolvedValue('hashedPassword'),
-      })
+      .useValue(authServiceMock)
       .compile();
-    useCase = moduleFixture.get<RegisterUserUseCase>(RegisterUserUseCase);
+    useCase = moduleFixture.get<LoginUserUseCase>(LoginUserUseCase);
+    userRepository = moduleFixture.get<UserRepository>(UserRepository);
   });
 
   it('should be defined', () => {
     expect(useCase).toBeDefined();
   });
 
-  it('should register a user', async () => {
+  it('should login a user', async () => {
     const user = userFactory();
-    const passwordWithoutHash = user.password;
-    const registeredUser = await useCase.execute(user);
-    expect(registeredUser).toBeDefined();
-    expect(passwordWithoutHash).not.toEqual(user.password);
+    await userRepository.save(user);
+
+    const { user: authenticatedUser, token } = await useCase.execute(
+      user.email,
+      user.password,
+    );
+    expect(authenticatedUser).toBeDefined();
+    expect(token).toBeDefined();
   });
 
-  it('should throw an error if the user already exists', async () => {
+  it('should throw an error if the user does not exist', async () => {
     const user = userFactory();
-    await useCase.execute(user);
-    await expect(useCase.execute(user)).rejects.toThrow(UserAlreadyExistsError);
+    await expect(useCase.execute(user.email, user.password)).rejects.toThrow(
+      UserUnauthorizedError,
+    );
   });
 });

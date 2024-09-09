@@ -17,6 +17,7 @@ describe(AuthGuard, () => {
           provide: AuthService,
           useValue: {
             verify: jest.fn(),
+            hashPassword: jest.fn(),
           },
         },
         {

@@ -1,1 +1,4 @@
-export { UserAlreadyExistsError } from './user.exception';
+export {
+  UserAlreadyExistsError,
+  UserUnauthorizedError,
+} from './user.exception';

@@ -4,7 +4,6 @@ import {
   UserAlreadyExistsError,
   UserRepository,
 } from '@/user/domain';
-import { hash } from 'bcryptjs';
 import Injectable from 'src/IoC/dependency-injector';
 @Injectable()
 export class RegisterUserUseCase {
@@ -26,6 +25,6 @@ export class RegisterUserUseCase {
     };
   }
   private async hashPassword(password: string): Promise<string> {
-    return await hash(password, 10);
+    return await this.authService.hashPassword(password);
   }
 }
