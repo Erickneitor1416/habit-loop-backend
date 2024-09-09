@@ -2,6 +2,7 @@ import { User, UserRepository } from '@/user/domain';
 
 export class MemoryUserRepository extends UserRepository {
   private readonly users: User[];
+  public static instance: MemoryUserRepository;
   constructor() {
     super();
     this.users = [];
@@ -17,8 +18,17 @@ export class MemoryUserRepository extends UserRepository {
     const index = this.users.findIndex(u => u.id === user.id);
     this.users[index] = user;
   }
+  public static getInstance(): MemoryUserRepository {
+    if (!MemoryUserRepository.instance) {
+      MemoryUserRepository.instance = new MemoryUserRepository();
+    }
+    return MemoryUserRepository.instance;
+  }
 
   async save(user: User): Promise<User> {
+    if (this.users.find(u => u.email === user.email)) {
+      return Promise.reject(new Error('User already exists'));
+    }
     this.users.push(user);
     return Promise.resolve(user);
   }
