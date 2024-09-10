@@ -1,5 +1,5 @@
 import { PrismaService } from '@/src/shared/prisma-client';
-import { RegisterUserUseCase } from '@/user/application';
+import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { AuthService, UserRepository } from '@/user/domain';
 import {
   JWTAuthService,
@@ -19,6 +19,7 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   providers: [
     RegisterUserUseCase,
+    LoginUserUseCase,
     PrismaUserRepository,
     PrismaService,
     { provide: UserRepository, useClass: PrismaUserRepository },

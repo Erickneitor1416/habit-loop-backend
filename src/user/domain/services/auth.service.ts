@@ -6,4 +6,5 @@ export abstract class AuthService {
   abstract verify(
     token: string,
   ): Promise<object> | object | Promise<void> | void;
+  abstract hashPassword(password: string): Promise<string> | string;
 }

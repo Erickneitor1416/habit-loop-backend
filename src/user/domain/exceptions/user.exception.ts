@@ -4,3 +4,9 @@ export class UserAlreadyExistsError extends Error {
     this.name = 'UserAlreadyExistsError';
   }
 }
+export class UserUnauthorizedError extends Error {
+  constructor() {
+    super('User unauthorized');
+    this.name = 'UserUnauthorizedError';
+  }
+}

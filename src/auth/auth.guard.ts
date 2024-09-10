@@ -27,10 +27,10 @@ export class AuthGuard implements CanActivate {
     try {
       const payload = await this.authService.verify(token);
       request.user = payload;
+      return true;
     } catch {
       throw new UnauthorizedException();
     }
-    return true;
   }
   private isPublic(context: ExecutionContext): boolean {
     return this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [

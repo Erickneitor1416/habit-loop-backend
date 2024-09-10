@@ -12,7 +12,10 @@ describe('UserController', () => {
       providers: [
         RegisterUserUseCase,
         { provide: UserRepository, useClass: MemoryUserRepository },
-        { provide: AuthService, useValue: { register: jest.fn() } },
+        {
+          provide: AuthService,
+          useValue: { register: jest.fn(), hashPassword: jest.fn() },
+        },
       ],
     }).compile();
 
