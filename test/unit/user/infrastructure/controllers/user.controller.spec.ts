@@ -1,4 +1,4 @@
-import { RegisterUserUseCase } from '@/user/application';
+import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { AuthService, UserRepository } from '@/user/domain';
 import { MemoryUserRepository, UserController } from '@/user/infrastructure';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -11,6 +11,7 @@ describe('UserController', () => {
       controllers: [UserController],
       providers: [
         RegisterUserUseCase,
+        LoginUserUseCase,
         { provide: UserRepository, useClass: MemoryUserRepository },
         {
           provide: AuthService,

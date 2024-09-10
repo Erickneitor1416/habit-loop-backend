@@ -14,15 +14,15 @@ export class LoginUserUseCase {
 
   async execute(email: string, password: string) {
     const user = await this.userRepository.findByEmail(email);
-    const hashedPassword = await this.authService.hashPassword(password);
 
-    if (!user || user.password !== hashedPassword) {
+    if (
+      !user ||
+      !(await this.authService.comparePasswords(user.password, password))
+    ) {
       throw new UserUnauthorizedError();
     }
+
     const token = await this.authService.login(user);
-    return {
-      user,
-      token,
-    };
+    return token;
   }
 }

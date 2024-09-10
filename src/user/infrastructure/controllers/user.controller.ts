@@ -1,13 +1,21 @@
 import { Public } from '@/src/shared/public-decorator';
-import { RegisterUserUseCase } from '@/user/application';
+import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { User } from '@/user/domain';
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RegisterUserDto, RegisterUserResponseDto } from '../dtos';
+import {
+  LoginUserDto,
+  LoginUserResponseDto,
+  RegisterUserDto,
+  RegisterUserResponseDto,
+} from '../dtos';
 @ApiTags('user')
 @Controller('user')
 export default class UserController {
-  constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
+  constructor(
+    private readonly registerUserUseCase: RegisterUserUseCase,
+    private readonly loginUserUseCase: LoginUserUseCase,
+  ) {}
 
   @ApiResponse({
     description: 'User registered successfully',
@@ -29,6 +37,29 @@ export default class UserController {
         email: user.email,
         token: token,
       };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  @ApiOperation({
+    summary: 'Login with email and password',
+  })
+  @ApiResponse({
+    description: 'User logged in successfully',
+    type: LoginUserResponseDto,
+    status: 200,
+  })
+  @Public()
+  @Post('login')
+  async login(
+    @Body() loginUserDto: LoginUserDto,
+  ): Promise<LoginUserResponseDto> {
+    try {
+      const token = await this.loginUserUseCase.execute(
+        loginUserDto.email,
+        loginUserDto.password,
+      );
+      return { token };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
