@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { UserDto } from './user.dto';
 
 export class LoginUserDto {
   @ApiProperty({
@@ -21,4 +22,6 @@ export class LoginUserResponseDto {
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
   })
   token: string;
+  @ApiProperty()
+  user: UserDto;
 }

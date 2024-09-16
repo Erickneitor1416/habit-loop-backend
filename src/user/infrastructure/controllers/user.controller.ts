@@ -33,8 +33,7 @@ export default class UserController {
         this.toDomain(registerUserDto),
       );
       return {
-        name: user.name,
-        email: user.email,
+        user: { name: user.name, email: user.email },
         token: token,
       };
     } catch (error) {
@@ -55,11 +54,17 @@ export default class UserController {
     @Body() loginUserDto: LoginUserDto,
   ): Promise<LoginUserResponseDto> {
     try {
-      const token = await this.loginUserUseCase.execute(
+      const { token, user } = await this.loginUserUseCase.execute(
         loginUserDto.email,
         loginUserDto.password,
       );
-      return { token };
+      return {
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+        },
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

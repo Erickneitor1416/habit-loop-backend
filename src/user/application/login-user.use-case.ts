@@ -21,6 +21,6 @@ export class LoginUserUseCase {
       throw new UserUnauthorizedError();
     }
     const token = await this.authService.login(user);
-    return token;
+    return { token, user };
   }
 }
