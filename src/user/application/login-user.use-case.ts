@@ -20,7 +20,7 @@ export class LoginUserUseCase {
     ) {
       throw new UserUnauthorizedError();
     }
-    const token = await this.authService.login(user);
-    return { token, user };
+    const accessToken = await this.authService.login(user);
+    return { accessToken, user };
   }
 }

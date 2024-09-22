@@ -3,12 +3,7 @@ import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { User } from '@/user/domain';
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  LoginUserDto,
-  LoginUserResponseDto,
-  RegisterUserDto,
-  RegisterUserResponseDto,
-} from '../dtos';
+import { LoginUserDto, LoginUserResponseDto, RegisterUserDto } from '../dtos';
 @ApiTags('user')
 @Controller('user')
 export default class UserController {
@@ -19,7 +14,7 @@ export default class UserController {
 
   @ApiResponse({
     description: 'User registered successfully',
-    type: RegisterUserResponseDto,
+    type: LoginUserResponseDto,
     status: 201,
   })
   @ApiOperation({ summary: 'Register a new user' })
@@ -27,14 +22,14 @@ export default class UserController {
   @Post('register')
   async register(
     @Body() registerUserDto: RegisterUserDto,
-  ): Promise<RegisterUserResponseDto> {
+  ): Promise<LoginUserResponseDto> {
     try {
-      const { user, token } = await this.registerUserUseCase.execute(
+      const { accessToken, user } = await this.registerUserUseCase.execute(
         this.toDomain(registerUserDto),
       );
       return {
         user: { name: user.name, email: user.email },
-        token: token,
+        accessToken,
       };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -54,12 +49,12 @@ export default class UserController {
     @Body() loginUserDto: LoginUserDto,
   ): Promise<LoginUserResponseDto> {
     try {
-      const { token, user } = await this.loginUserUseCase.execute(
+      const { accessToken, user } = await this.loginUserUseCase.execute(
         loginUserDto.email,
         loginUserDto.password,
       );
       return {
-        token,
+        accessToken,
         user: {
           name: user.name,
           email: user.email,

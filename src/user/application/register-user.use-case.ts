@@ -21,7 +21,7 @@ export class RegisterUserUseCase {
     user.password = await this.hashPassword(user.password);
     return {
       user: await this.userRepository.save(user),
-      token: await this.authService.register(user),
+      accessToken: await this.authService.register(user),
     };
   }
   private async hashPassword(password: string): Promise<string> {
