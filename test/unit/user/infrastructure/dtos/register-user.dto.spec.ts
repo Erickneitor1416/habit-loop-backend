@@ -1,5 +1,5 @@
 import {
-  BaseUserDto,
+  LoginUserDto,
   RegisterUserDto,
   RegisterUserResponseDto,
 } from '@/src/user/infrastructure';
@@ -9,43 +9,6 @@ import { validate } from 'class-validator';
 describe('RegisterUserDto', () => {
   it('should be defined', () => {
     expect(new RegisterUserDto()).toBeDefined();
-  });
-});
-
-describe('BaseUserDto', () => {
-  it('should pass validation with valid inputs', async () => {
-    const data = {
-      name: 'User',
-      email: 'user@example.com',
-    };
-    const dto = plainToInstance(BaseUserDto, data);
-
-    const errors = await validate(dto);
-    expect(errors.length).toBe(0);
-  });
-
-  it('should fail if name is empty', async () => {
-    const data = {
-      name: '',
-      email: 'user@example.com',
-    };
-    const dto = plainToInstance(BaseUserDto, data);
-
-    const errors = await validate(dto);
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors[0].constraints?.isNotEmpty).toBeDefined();
-  });
-
-  it('should fail if email is invalid', async () => {
-    const data = {
-      name: 'User',
-      email: 'user',
-    };
-    const dto = plainToInstance(BaseUserDto, data);
-
-    const errors = await validate(dto);
-    expect(errors.length).toBeGreaterThan(0);
-    expect(errors[0].constraints?.isEmail).toBeDefined();
   });
 });
 
@@ -126,5 +89,37 @@ describe('RegisterUserDto', () => {
     const errors = await validate(dto);
     expect(errors.length).toBeGreaterThan(0);
     expect(errors[0].constraints?.minLength).toBeDefined();
+  });
+});
+
+describe('LoginUserDto', () => {
+  it('should be defined', () => {
+    const data = {
+      email: 'user@example.com',
+      password: 'password',
+    };
+    const dto = plainToInstance(LoginUserDto, data);
+    expect(dto).toBeDefined();
+  });
+  it("should not pass validation if email isn't an email", async () => {
+    const data = {
+      email: 'user',
+      password: 'password',
+    };
+    const dto = plainToInstance(LoginUserDto, data);
+
+    const errors = await validate(dto);
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0].constraints?.isEmail).toBeDefined();
+  });
+  it('should not pass validation if password is empty', async () => {
+    const data = {
+      email: 'user@example.com',
+      password: '',
+    };
+    const dto = plainToInstance(LoginUserDto, data);
+    const errors = await validate(dto);
+    expect(errors.length).toBeGreaterThan(0);
+    expect(errors[0].constraints?.isNotEmpty).toBeDefined();
   });
 });

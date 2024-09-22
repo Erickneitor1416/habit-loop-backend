@@ -7,4 +7,8 @@ export abstract class AuthService {
     token: string,
   ): Promise<object> | object | Promise<void> | void;
   abstract hashPassword(password: string): Promise<string> | string;
+  abstract comparePasswords(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> | boolean;
 }

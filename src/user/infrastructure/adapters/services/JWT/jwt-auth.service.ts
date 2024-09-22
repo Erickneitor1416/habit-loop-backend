@@ -1,12 +1,18 @@
 import { AuthService, User } from '@/user/domain';
 import { JwtService } from '@nestjs/jwt';
-import { hash } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import Injectable from 'src/IoC/dependency-injector';
 
 @Injectable()
 export class JWTAuthService extends AuthService {
   constructor(private readonly jwtService: JwtService) {
     super();
+  }
+  async comparePasswords(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await compare(password, hashedPassword);
   }
   async hashPassword(password: string): Promise<string> {
     return await hash(password, 10);

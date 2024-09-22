@@ -37,11 +37,7 @@ describe(LoginUserUseCase, () => {
     const user = userFactory();
     await userRepository.save(user);
 
-    const { user: authenticatedUser, token } = await useCase.execute(
-      user.email,
-      user.password,
-    );
-    expect(authenticatedUser).toBeDefined();
+    const token = await useCase.execute(user.email, user.password);
     expect(token).toBeDefined();
   });
 
