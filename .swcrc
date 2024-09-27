@@ -16,7 +16,8 @@
       "@/src/*": ["src/*"],
       "@/shared/*": ["src/shared/*"],
       "@/tests/*": ["tests/*"],
-      "@/user/*": ["src/user/*"]
+      "@/user/*": ["src/user/*"],
+      "@/habit/*": ["src/habit/*"]
     },
     "target": "esnext"
   },
