@@ -8,7 +8,7 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from '@/src/app.module';
-
+let logger: Logger;
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -27,13 +27,16 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   await app.listen(port, '0.0.0.0');
 
-  const logger = app.get(Logger);
+  logger = app.get(Logger);
   logger.log(`App is ready and listening on port ${port} 🚀`);
 }
 
 bootstrap().catch(handleError);
 
 function handleError(error: unknown) {
+  if (logger) {
+    logger.error(error);
+  }
   console.error(error);
   process.exit(1);
 }

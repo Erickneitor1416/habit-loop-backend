@@ -6,9 +6,11 @@ import {
 } from '@/src/user/domain';
 import { LoginUserUseCase } from '@/user/application';
 import { MemoryUserRepository, UserModule } from '@/user/infrastructure';
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { userFactory } from 'test/factories/user/user.factory';
 import { authServiceMock } from 'test/mocks/auth-service.mock';
+import { loggerServiceMock } from 'test/mocks/logger-service.mock';
 import { PrismaServiceMock } from 'test/mocks/prisma-service.mock';
 
 describe(LoginUserUseCase, () => {
@@ -24,6 +26,8 @@ describe(LoginUserUseCase, () => {
       .useClass(PrismaServiceMock)
       .overrideProvider(AuthService)
       .useValue(authServiceMock)
+      .overrideProvider(Logger)
+      .useValue(loggerServiceMock)
       .compile();
     useCase = moduleFixture.get<LoginUserUseCase>(LoginUserUseCase);
     userRepository = moduleFixture.get<UserRepository>(UserRepository);

@@ -1,3 +1,4 @@
+import { LoggerModule } from '@/src/shared/logger.module';
 import { PrismaService } from '@/src/shared/prisma-client';
 import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { AuthService, UserRepository } from '@/user/domain';
@@ -16,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET ?? 'secret',
       signOptions: { expiresIn: '1d' },
     }),
+    LoggerModule,
   ],
   providers: [
     RegisterUserUseCase,
