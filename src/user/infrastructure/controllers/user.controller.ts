@@ -1,13 +1,22 @@
 import { Public } from '@/src/shared/public-decorator';
 import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { User } from '@/user/domain';
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  HttpCode,
+  Inject,
+  Logger,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginUserDto, LoginUserResponseDto, RegisterUserDto } from '../dtos';
 @ApiTags('user')
 @Controller('user')
 export default class UserController {
   constructor(
+    @Inject(Logger) private readonly logger: Logger,
     private readonly registerUserUseCase: RegisterUserUseCase,
     private readonly loginUserUseCase: LoginUserUseCase,
   ) {}
@@ -32,6 +41,7 @@ export default class UserController {
         accessToken,
       };
     } catch (error) {
+      this.logger.error(error);
       throw new BadRequestException(error.message);
     }
   }
@@ -44,6 +54,7 @@ export default class UserController {
     status: 200,
   })
   @Public()
+  @HttpCode(200)
   @Post('login')
   async login(
     @Body() loginUserDto: LoginUserDto,
@@ -61,6 +72,7 @@ export default class UserController {
         },
       };
     } catch (error) {
+      this.logger.error(error);
       throw new BadRequestException(error.message);
     }
   }

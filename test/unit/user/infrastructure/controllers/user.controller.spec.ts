@@ -1,7 +1,9 @@
 import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
 import { AuthService, UserRepository } from '@/user/domain';
 import { MemoryUserRepository, UserController } from '@/user/infrastructure';
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { loggerServiceMock } from 'test/mocks/logger-service.mock';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -16,6 +18,10 @@ describe('UserController', () => {
         {
           provide: AuthService,
           useValue: { register: jest.fn(), hashPassword: jest.fn() },
+        },
+        {
+          provide: Logger,
+          useValue: loggerServiceMock,
         },
       ],
     }).compile();

@@ -11,6 +11,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as nock from 'nock';
 import { AppModule } from 'src/app.module';
 import request from 'supertest';
+import { PrismaServiceMock } from 'test/mocks/prisma-service.mock';
 
 describe('Health', () => {
   let app: NestFastifyApplication;
@@ -22,12 +23,7 @@ describe('Health', () => {
       .overrideProvider(PrismaUserRepository)
       .useClass(MemoryUserRepository)
       .overrideProvider(PrismaService)
-      .useClass(
-        class PrismaServiceMock extends PrismaService {
-          async onModuleInit() {}
-          async onModuleDestroy() {}
-        },
-      )
+      .useClass(PrismaServiceMock)
       .compile();
 
     app = moduleFixture.createNestApplication<NestFastifyApplication>(
