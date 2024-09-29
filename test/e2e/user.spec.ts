@@ -105,4 +105,22 @@ describe('User', () => {
       'password should be at least 8 characters',
     );
   });
+  it('/POST login', async () => {
+    const registerResponse = await request(app.getHttpServer())
+      .post('/user/register')
+      .send({
+        email: 'user@example2.com',
+        name: 'User',
+        password: 'password',
+      });
+    const response = await request(app.getHttpServer())
+      .post('/user/login')
+      .send({
+        email: 'user@example2.com',
+        password: 'password',
+      });
+    console.log(response.status);
+    expect(registerResponse.status).toBe(201);
+    expect(response.body.accessToken).toBeDefined();
+  });
 });

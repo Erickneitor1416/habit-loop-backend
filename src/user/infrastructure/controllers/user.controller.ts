@@ -5,6 +5,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  HttpCode,
   Inject,
   Logger,
   Post,
@@ -53,6 +54,7 @@ export default class UserController {
     status: 200,
   })
   @Public()
+  @HttpCode(200)
   @Post('login')
   async login(
     @Body() loginUserDto: LoginUserDto,
