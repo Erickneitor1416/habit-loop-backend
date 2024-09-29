@@ -1,0 +1,1 @@
+export { MemoryHabitRepository } from './adapters';

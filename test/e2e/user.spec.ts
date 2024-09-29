@@ -119,7 +119,6 @@ describe('User', () => {
         email: 'user@example2.com',
         password: 'password',
       });
-    console.log(response.status);
     expect(registerResponse.status).toBe(201);
     expect(response.body.accessToken).toBeDefined();
   });
