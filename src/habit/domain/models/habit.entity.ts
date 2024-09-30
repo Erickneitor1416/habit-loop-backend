@@ -1,8 +1,10 @@
+import { Frequency } from './frequency.enum';
+
 export class Habit {
   constructor(
     private _name: string,
     private _description: string,
-    private _frequency: number,
+    private _frequency: Frequency,
     private _goal: number,
     private _id?: string,
   ) {
@@ -32,10 +34,10 @@ export class Habit {
   public set description(value: string) {
     this._description = value;
   }
-  public get frequency(): number {
+  public get frequency(): Frequency {
     return this._frequency;
   }
-  public set frequency(value: number) {
+  public set frequency(value: Frequency) {
     this._frequency = value;
   }
   public get goal(): number {

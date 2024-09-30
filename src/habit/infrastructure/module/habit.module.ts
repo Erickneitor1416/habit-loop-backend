@@ -1,31 +1,15 @@
+import { SaveHabitUseCase } from '@/habit/application';
+import { HabitRepository } from '@/habit/domain';
+import { HabitController, MemoryHabitRepository } from '@/habit/infrastructure';
 import { LoggerModule } from '@/src/shared/logger.module';
-import { PrismaService } from '@/src/shared/prisma-client';
-import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
-import { AuthService, UserRepository } from '@/user/domain';
-import {
-  JWTAuthService,
-  PrismaUserRepository,
-  UserController,
-} from '@/user/infrastructure';
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+
 @Module({
-  controllers: [UserController],
-  imports: [
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET ?? 'secret',
-      signOptions: { expiresIn: '1d' },
-    }),
-    LoggerModule,
-  ],
+  controllers: [HabitController],
+  imports: [LoggerModule],
   providers: [
-    RegisterUserUseCase,
-    LoginUserUseCase,
-    PrismaUserRepository,
-    PrismaService,
-    { provide: UserRepository, useClass: PrismaUserRepository },
-    { provide: AuthService, useClass: JWTAuthService },
+    SaveHabitUseCase,
+    { provide: HabitRepository, useClass: MemoryHabitRepository },
   ],
 })
-export class UserModule {}
+export class HabitModule {}

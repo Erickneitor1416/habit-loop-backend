@@ -1,1 +1,1 @@
-export { MemoryHabitRepository } from './memory/memory.habit-repository';
+export { MemoryHabitRepository } from './repository/memory/memory.habit-repository';

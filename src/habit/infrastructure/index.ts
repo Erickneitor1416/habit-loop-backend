@@ -1,1 +1,4 @@
-export { MemoryHabitRepository } from './adapters';
+export * from './adapters';
+export * from './controllers';
+export * from './dtos';
+export * from './module';

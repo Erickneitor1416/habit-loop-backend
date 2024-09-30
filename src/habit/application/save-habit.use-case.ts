@@ -5,8 +5,8 @@ import Injectable from '@/src/IoC/dependency-injector';
 export class SaveHabitUseCase {
   constructor(private readonly habitRepository: HabitRepository) {}
 
-  async execute(habit: Habit) {
-    const savedHabit = await this.habitRepository.save(habit);
+  async execute(habit: Habit, userId: string): Promise<Habit> {
+    const savedHabit = await this.habitRepository.save(habit, userId);
     if (!savedHabit) {
       throw new HabitNotCreatedError();
     }

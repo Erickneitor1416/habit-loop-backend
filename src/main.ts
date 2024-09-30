@@ -15,13 +15,13 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
-
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT', '3000');
   const config = new DocumentBuilder()
     .setTitle('Habit Loop API')
     .setDescription('The Habit Loop backend')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
