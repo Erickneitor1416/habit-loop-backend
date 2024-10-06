@@ -1,3 +1,4 @@
+import { AuthGuard } from '@/src/auth/auth.guard';
 import { LoggerModule } from '@/src/shared/logger.module';
 import { PrismaService } from '@/src/shared/prisma-client';
 import { LoginUserUseCase, RegisterUserUseCase } from '@/user/application';
@@ -8,17 +9,10 @@ import {
   UserController,
 } from '@/user/infrastructure';
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
 @Module({
   controllers: [UserController],
-  imports: [
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET ?? 'secret',
-      signOptions: { expiresIn: '1d' },
-    }),
-    LoggerModule,
-  ],
+  imports: [LoggerModule],
   providers: [
     RegisterUserUseCase,
     LoginUserUseCase,
@@ -26,6 +20,10 @@ import { JwtModule } from '@nestjs/jwt';
     PrismaService,
     { provide: UserRepository, useClass: PrismaUserRepository },
     { provide: AuthService, useClass: JWTAuthService },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class UserModule {}

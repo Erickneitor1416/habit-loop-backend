@@ -21,4 +21,23 @@ model User {
   email   String   @unique @db.VarChar(255)
   password String   @db.VarChar(255)
   createdAt DateTime @default(now())
+  Habit Habit[]
+}
+
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+model Habit {
+  id          Int       @id @default(autoincrement())
+  userId      String
+  name        String
+  description String
+  frequency   Frequency
+  goals       Int
+  createdAt   DateTime  @default(now())
+  User        User      @relation(fields: [userId], references: [id])
 }
