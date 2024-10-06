@@ -13,7 +13,7 @@
     "start:dev": "nest start -b swc -w",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "migrate:dev": "prisma migrate dev",
+    "migrate:dev": "prisma migrate dev --name init",
     "migrate:deploy": "prisma migrate deploy",
     "start:migrate:prod": "npm run migrate:deploy && npm run start:prod",
     "prepare": "husky",
