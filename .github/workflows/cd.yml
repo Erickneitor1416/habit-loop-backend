@@ -22,12 +22,6 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/habit-loop-production
 
-      - name: delete Kubernetes secret
-        run: |
-          if (kubectl get secret db-secret -ErrorAction SilentlyContinue) {
-            kubectl delete secret db-secret
-          }
-
       - name: Create Kubernetes secret
         run: kubectl create secret generic db-secret `
           --from-literal=DATABASE_URL=${{ secrets.DATABASE_URL }} `
