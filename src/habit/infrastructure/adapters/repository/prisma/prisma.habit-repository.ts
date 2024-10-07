@@ -5,6 +5,9 @@ import { Habit as PrismaHabit } from '@prisma/client';
 
 @Injectable()
 export class PrismaHabitRepository extends HabitRepository {
+  constructor(private readonly prisma: PrismaService) {
+    super();
+  }
   update(habit: Habit, userId: string): Promise<Habit> {
     throw new Error(`Method not implemented.${userId},${habit.name}`);
   }
@@ -17,10 +20,11 @@ export class PrismaHabitRepository extends HabitRepository {
   findById(id: string, userId: string): Promise<Habit | null> {
     throw new Error(`Method not implemented.${id},${userId}`);
   }
-  constructor(private readonly prisma: PrismaService) {
-    super();
-  }
   async save(habit: Habit, userId: string): Promise<Habit | null> {
+    const existingHabit = await this.prisma.habit.findFirst({
+      where: { name: habit.name, userId },
+    });
+    if (existingHabit) return null;
     const prismaHabit = await this.prisma.habit.create({
       data: {
         name: habit.name,

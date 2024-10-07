@@ -10,10 +10,3 @@ export class HabitAlreadyExistsError extends Error {
     this.name = 'HabitAlreadyExistsError';
   }
 }
-
-export class HabitNotCreatedError extends Error {
-  constructor() {
-    super('Habit not created');
-    this.name = 'HabitNotCreatedError';
-  }
-}

@@ -1,4 +1,8 @@
-import { Habit, HabitNotCreatedError, HabitRepository } from '@/habit/domain';
+import {
+  Habit,
+  HabitAlreadyExistsError,
+  HabitRepository,
+} from '@/habit/domain';
 import Injectable from '@/src/IoC/dependency-injector';
 
 @Injectable()
@@ -8,7 +12,7 @@ export class SaveHabitUseCase {
   async execute(habit: Habit, userId: string): Promise<Habit> {
     const savedHabit = await this.habitRepository.save(habit, userId);
     if (!savedHabit) {
-      throw new HabitNotCreatedError();
+      throw new HabitAlreadyExistsError();
     }
     return savedHabit;
   }

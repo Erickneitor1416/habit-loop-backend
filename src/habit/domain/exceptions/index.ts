@@ -1,5 +1,1 @@
-export {
-  HabitAlreadyExistsError,
-  HabitNotCreatedError,
-  HabitNotFoundError,
-} from './habit.exception';
+export { HabitAlreadyExistsError, HabitNotFoundError } from './habit.exception';
