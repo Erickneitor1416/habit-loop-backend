@@ -26,7 +26,10 @@ jobs:
         run: kubectl create secret generic db-secret `
           --from-literal=DATABASE_URL=${{ secrets.DATABASE_URL }} `
           --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} `
-          --from-literal=DIRECT_URL=${{ secrets.DIRECT_URL }}
+          --from-literal=DIRECT_URL=${{ secrets.DIRECT_URL }} `
+          --from-literal=POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} `
+          --from-literal=POSTGRES_USER=${{ secrets.POSTGRES_USER }} `
+          --from-literal=POSTGRES_DB=${{ secrets.POSTGRES_DB }}
 
       - name: Deploy to miniKube
         run: kubectl apply -f .\infrastructure/
