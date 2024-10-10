@@ -1,1 +1,1 @@
-export { MemoryHabitRepository } from './repository/memory/memory.habit-repository';
+export { MemoryHabitRepository, PrismaHabitRepository } from './repository';

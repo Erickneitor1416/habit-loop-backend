@@ -6,6 +6,7 @@ import {
 } from '@/src/habit/infrastructure';
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { FastifyRequest } from 'fastify';
 import { habitFactory } from 'test/factories/habit/habit.factory';
 import { loggerServiceMock } from 'test/mocks/logger-service.mock';
 
@@ -36,7 +37,8 @@ describe('HabitController', () => {
   });
   it('should return a saved habit', async () => {
     const habit = habitFactory();
-    const savedHabit = await controller.create(habit);
+    const request = { user: { sub: '123' } } as FastifyRequest;
+    const savedHabit = await controller.create(habit, request);
     expect(savedHabit).toEqual({
       description: savedHabit.description,
       frequency: savedHabit.frequency,
@@ -46,7 +48,8 @@ describe('HabitController', () => {
   });
   it('should throw an error when the habit is not saved', async () => {
     const habit = habitFactory({ name: 'Example' });
-    await controller.create(habit);
-    await expect(controller.create(habit)).rejects.toThrow();
+    const request = { user: { sub: '1234' } } as FastifyRequest;
+    await controller.create(habit, request);
+    await expect(controller.create(habit, request)).rejects.toThrow();
   });
 });

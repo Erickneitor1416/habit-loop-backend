@@ -7,6 +7,7 @@ import {
   Inject,
   Logger,
   Post,
+  Request,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -14,6 +15,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { FastifyRequest } from 'fastify';
 import { SaveHabitDto } from '../dtos';
 
 @ApiTags('habit')
@@ -33,12 +35,12 @@ export class HabitController {
   @Post('create')
   async create(
     @Body() saveHabitDto: SaveHabitDto,
-    userId: string,
+    @Request() req: FastifyRequest,
   ): Promise<SaveHabitDto> {
     try {
       const savedHabit = await this.saveHabitUseCase.execute(
         this.toDomain(saveHabitDto),
-        userId,
+        req.user!.sub,
       );
       return this.toDto(savedHabit);
     } catch (error) {
