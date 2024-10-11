@@ -37,8 +37,8 @@ export default class UserController {
         this.toDomain(registerUserDto),
       );
       return {
-        user: { name: user.name, email: user.email },
         accessToken,
+        user: { name: user.name, email: user.email },
       };
     } catch (error) {
       this.logger.error(error);

@@ -10,7 +10,7 @@ export class MemoryHabitRepository extends HabitRepository {
     return Promise.resolve(habit);
   }
   async findAll(userId: string): Promise<Habit[]> {
-    return Promise.resolve(this.habits[userId]);
+    return Promise.resolve(this.habits[userId] ?? []);
   }
   async save(habit: Habit, userId: string): Promise<Habit | null> {
     if (this.habits[userId]?.find(h => h.name === habit.name))

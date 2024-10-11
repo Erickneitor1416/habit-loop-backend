@@ -14,8 +14,11 @@ export class PrismaHabitRepository extends HabitRepository {
   delete(habit: Habit, userId: string): Promise<void> {
     throw new Error(`Method not implemented.${habit.name},${userId}`);
   }
-  findAll(userId: string): Promise<Habit[]> {
-    throw new Error(`Method not implemented.${userId}`);
+  async findAll(userId: string): Promise<Habit[]> {
+    const habits = await this.prisma.habit.findMany({
+      where: { userId },
+    });
+    return habits.map(prismaHabit => this.toDomain(prismaHabit));
   }
   findById(id: string, userId: string): Promise<Habit | null> {
     throw new Error(`Method not implemented.${id},${userId}`);

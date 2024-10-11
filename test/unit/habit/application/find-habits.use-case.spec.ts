@@ -1,15 +1,15 @@
-import { SaveHabitUseCase } from '@/src/habit/application';
-import { HabitAlreadyExistsError, HabitRepository } from '@/src/habit/domain';
+import { FindHabitsUseCase } from '@/src/habit/application';
+import { HabitRepository } from '@/src/habit/domain';
 import { MemoryHabitRepository } from '@/src/habit/infrastructure';
 import { habitFactory } from 'test/factories/habit/habit.factory';
 import { userFactory } from 'test/factories/user/user.factory';
 
-describe(SaveHabitUseCase, () => {
-  let useCase: SaveHabitUseCase;
+describe(FindHabitsUseCase, () => {
+  let useCase: FindHabitsUseCase;
   let habitRepository: HabitRepository;
   beforeAll(async () => {
     habitRepository = MemoryHabitRepository.getInstance();
-    useCase = new SaveHabitUseCase(habitRepository);
+    useCase = new FindHabitsUseCase(habitRepository);
   });
 
   it('should be defined', () => {
@@ -19,16 +19,15 @@ describe(SaveHabitUseCase, () => {
   it('should return the saved habit', async () => {
     const habit = habitFactory();
     const user = userFactory();
-    const savedHabit = await useCase.execute(habit, user.id ?? '');
+    habitRepository.save(habit, user.id ?? '');
+    const savedHabit = await useCase.execute(user.id ?? '');
     expect(savedHabit).toBeDefined();
+    expect(savedHabit[0]).toEqual(habit);
   });
 
-  it('should throw an error if the habit is not saved', async () => {
-    const habit = habitFactory();
+  it('should return a empty list if there are not habit', async () => {
     const user = userFactory();
-    habitRepository.save(habit, user.id ?? '');
-    await expect(useCase.execute(habit, user.id ?? '')).rejects.toThrow(
-      HabitAlreadyExistsError,
-    );
+    const habits = await useCase.execute(user.id ?? '');
+    expect(habits).toEqual([]);
   });
 });

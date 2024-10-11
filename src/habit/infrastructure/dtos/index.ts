@@ -1,1 +1,1 @@
-export { SaveHabitDto } from './save-habit.dto';
+export { HabitDto } from './save-habit.dto';
