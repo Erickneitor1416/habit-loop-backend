@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 import { Frequency } from '../../domain';
 
-export class SaveHabitDto {
+export class HabitDto {
   @ApiProperty({
     example: 'Exercise',
   })
@@ -30,4 +30,6 @@ export class SaveHabitDto {
   @Min(1)
   @IsNotEmpty()
   goal: number;
+
+  id?: string;
 }

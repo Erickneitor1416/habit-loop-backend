@@ -18,11 +18,12 @@ import { APP_GUARD } from '@nestjs/core';
     LoginUserUseCase,
     PrismaUserRepository,
     PrismaService,
+    AuthGuard,
     { provide: UserRepository, useClass: PrismaUserRepository },
     { provide: AuthService, useClass: JWTAuthService },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
+      useExisting: AuthGuard,
     },
   ],
 })

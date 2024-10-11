@@ -1,4 +1,4 @@
-import { SaveHabitUseCase } from '@/src/habit/application';
+import { FindHabitsUseCase, SaveHabitUseCase } from '@/src/habit/application';
 import { HabitRepository } from '@/src/habit/domain';
 import {
   HabitController,
@@ -18,6 +18,7 @@ describe('HabitController', () => {
       controllers: [HabitController],
       providers: [
         SaveHabitUseCase,
+        FindHabitsUseCase,
         {
           provide: Logger,
           useValue: loggerServiceMock,
@@ -35,6 +36,7 @@ describe('HabitController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
   it('should return a saved habit', async () => {
     const habit = habitFactory();
     const request = { user: { sub: '123' } } as FastifyRequest;
@@ -46,10 +48,31 @@ describe('HabitController', () => {
       name: savedHabit.name,
     });
   });
+
   it('should throw an error when the habit is not saved', async () => {
     const habit = habitFactory({ name: 'Example' });
     const request = { user: { sub: '1234' } } as FastifyRequest;
     await controller.create(habit, request);
     await expect(controller.create(habit, request)).rejects.toThrow();
+  });
+
+  it("should return the user's habits", async () => {
+    const habit = habitFactory();
+    const request = { user: { sub: '123' } } as FastifyRequest;
+    await controller.create(habit, request);
+    const habits = await controller.findAll(request);
+    expect(habits).toEqual([
+      {
+        description: habit.description,
+        frequency: habit.frequency,
+        goal: habit.goal,
+        name: habit.name,
+      },
+    ]);
+  });
+  it('should return an empty list if there are no habits', async () => {
+    const request = { user: { sub: '123' } } as FastifyRequest;
+    const habits = await controller.findAll(request);
+    expect(habits).toEqual([]);
   });
 });

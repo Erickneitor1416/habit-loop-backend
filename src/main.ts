@@ -12,7 +12,7 @@ let logger: Logger;
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({ logger: true }),
   );
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   const configService = app.get(ConfigService);
