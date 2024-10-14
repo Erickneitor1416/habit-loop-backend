@@ -1,4 +1,8 @@
-import { FindHabitsUseCase, SaveHabitUseCase } from '@/habit/application';
+import {
+  FindHabitsUseCase,
+  SaveHabitUseCase,
+  UpdateHabitUseCase,
+} from '@/habit/application';
 import { HabitRepository } from '@/habit/domain';
 import { HabitController, PrismaHabitRepository } from '@/habit/infrastructure';
 import { LoggerModule } from '@/src/shared/logger.module';
@@ -11,6 +15,7 @@ import { Module } from '@nestjs/common';
   providers: [
     SaveHabitUseCase,
     FindHabitsUseCase,
+    UpdateHabitUseCase,
     PrismaService,
     { provide: HabitRepository, useClass: PrismaHabitRepository },
   ],

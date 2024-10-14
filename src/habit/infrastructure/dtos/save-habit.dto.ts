@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 import { Frequency } from '../../domain';
 
 export class HabitDto {
@@ -31,5 +38,9 @@ export class HabitDto {
   @IsNotEmpty()
   goal: number;
 
+  @ApiProperty({
+    example: 'abc-123',
+  })
+  @IsOptional()
   id?: string;
 }

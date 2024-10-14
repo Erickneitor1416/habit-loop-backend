@@ -8,8 +8,21 @@ export class PrismaHabitRepository extends HabitRepository {
   constructor(private readonly prisma: PrismaService) {
     super();
   }
-  update(habit: Habit, userId: string): Promise<Habit> {
-    throw new Error(`Method not implemented.${userId},${habit.name}`);
+  async update(habit: Habit, userId: string): Promise<Habit | null> {
+    const habitWithSameName = await this.prisma.habit.findFirst({
+      where: { name: habit.name, userId },
+    });
+    if (habitWithSameName && habitWithSameName.id !== habit.id) return null;
+    const updatedHabit = await this.prisma.habit.update({
+      where: { id: habit.id },
+      data: {
+        name: habit.name,
+        description: habit.description,
+        frequency: habit.frequency,
+        goals: habit.goal,
+      },
+    });
+    return this.toDomain(updatedHabit);
   }
   delete(habit: Habit, userId: string): Promise<void> {
     throw new Error(`Method not implemented.${habit.name},${userId}`);
@@ -20,13 +33,17 @@ export class PrismaHabitRepository extends HabitRepository {
     });
     return habits.map(prismaHabit => this.toDomain(prismaHabit));
   }
-  findById(id: string, userId: string): Promise<Habit | null> {
-    throw new Error(`Method not implemented.${id},${userId}`);
+  async findById(id: string, userId: string): Promise<Habit | null> {
+    const habit = await this.prisma.habit.findFirst({
+      where: { id, userId },
+    });
+    return habit ? this.toDomain(habit) : null;
   }
   async save(habit: Habit, userId: string): Promise<Habit | null> {
     const existingHabit = await this.prisma.habit.findFirst({
       where: { name: habit.name, userId },
     });
+    console.log('existingHabit:', existingHabit, 'habit:', habit);
     if (existingHabit) return null;
     const prismaHabit = await this.prisma.habit.create({
       data: {

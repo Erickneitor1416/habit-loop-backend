@@ -1,4 +1,8 @@
-import { FindHabitsUseCase, SaveHabitUseCase } from '@/src/habit/application';
+import {
+  FindHabitsUseCase,
+  SaveHabitUseCase,
+  UpdateHabitUseCase,
+} from '@/src/habit/application';
 import { HabitRepository } from '@/src/habit/domain';
 import {
   HabitController,
@@ -19,6 +23,7 @@ describe('HabitController', () => {
       providers: [
         SaveHabitUseCase,
         FindHabitsUseCase,
+        UpdateHabitUseCase,
         {
           provide: Logger,
           useValue: loggerServiceMock,
@@ -46,6 +51,7 @@ describe('HabitController', () => {
       frequency: savedHabit.frequency,
       goal: savedHabit.goal,
       name: savedHabit.name,
+      id: savedHabit.id,
     });
   });
 
@@ -67,6 +73,7 @@ describe('HabitController', () => {
         frequency: habit.frequency,
         goal: habit.goal,
         name: habit.name,
+        id: habit.id,
       },
     ]);
   });

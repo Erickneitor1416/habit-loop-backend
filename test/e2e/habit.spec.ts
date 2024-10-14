@@ -93,4 +93,25 @@ describe(Habit, () => {
     const response = await request(app.getHttpServer()).get('/habit');
     expect(response.status).toBe(200);
   });
+
+  it('/PUT update habit', async () => {
+    const habit = habitFactory();
+    await request(app.getHttpServer()).post('/habit/create').send({
+      name: habit.name,
+      description: habit.description,
+      frequency: habit.frequency,
+      goal: habit.goal,
+      id: habit.id,
+    });
+    const response = await request(app.getHttpServer())
+      .put('/habit/update')
+      .send({
+        name: habit.name,
+        description: habit.description + ' updated',
+        frequency: habit.frequency,
+        goal: habit.goal,
+        id: habit.id,
+      });
+    expect(response.status).toBe(200);
+  });
 });

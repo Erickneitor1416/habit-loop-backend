@@ -1,4 +1,8 @@
-import { FindHabitsUseCase, SaveHabitUseCase } from '@/habit/application';
+import {
+  FindHabitsUseCase,
+  SaveHabitUseCase,
+  UpdateHabitUseCase,
+} from '@/habit/application';
 import { Habit } from '@/habit/domain';
 import {
   BadRequestException,
@@ -8,6 +12,7 @@ import {
   Inject,
   Logger,
   Post,
+  Put,
   Request,
 } from '@nestjs/common';
 import {
@@ -27,6 +32,7 @@ export class HabitController {
     @Inject(Logger) private readonly logger: Logger,
     private readonly saveHabitUseCase: SaveHabitUseCase,
     private readonly findHabitsUseCase: FindHabitsUseCase,
+    private readonly updateHabitUseCase: UpdateHabitUseCase,
   ) {}
   @ApiResponse({
     description: 'The habit has been successfully registered.',
@@ -66,13 +72,38 @@ export class HabitController {
       throw new BadRequestException(error.message);
     }
   }
+  @ApiResponse({
+    description: 'The habit has been successfully updated.',
+    type: HabitDto,
+    status: 200,
+  })
+  @ApiOperation({
+    summary: 'Update a habit',
+  })
+  @Put('update')
+  async update(
+    @Body() habitDto: HabitDto,
+    @Request() req: FastifyRequest,
+  ): Promise<HabitDto> {
+    try {
+      const savedHabit = await this.updateHabitUseCase.execute(
+        this.toDomain(habitDto),
+        req.user!.sub,
+      );
+      return this.toDto(savedHabit);
+    } catch (error) {
+      this.logger.error(error);
+      throw new BadRequestException(error.message);
+    }
+  }
 
-  private toDomain(saveHabitDto: HabitDto): Habit {
+  private toDomain(habitDto: HabitDto): Habit {
     return new Habit(
-      saveHabitDto.name,
-      saveHabitDto.description,
-      saveHabitDto.frequency,
-      saveHabitDto.goal,
+      habitDto.name,
+      habitDto.description,
+      habitDto.frequency,
+      habitDto.goal,
+      habitDto.id,
     );
   }
   private toDto(habit: Habit): HabitDto {
